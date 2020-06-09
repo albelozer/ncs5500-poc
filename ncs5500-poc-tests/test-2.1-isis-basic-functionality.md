@@ -1,10 +1,10 @@
-# Test 2.1: ISIS Basic Functionality
+# Test 2.1: IS-IS basic functionality
 
 {% hint style="info" %}
-Be aware of IS-IS multitopology support on Huawei and Juniper.
+Be aware of IS-IS multitopology support and default state on Huawei and Juniper.
 {% endhint %}
 
-## **ISIS Configuration Template**
+## **IS-IS configuration template**
 
 ```erlang
 router isis {{ ISIS_PROCESS_NAME }}
@@ -35,7 +35,7 @@ router isis {{ ISIS_PROCESS_NAME }}
  !
 ```
 
-## **ISIS Configuration Example**
+## **IS-IS configuration example**
 
 ```erlang
 router isis CORE
@@ -88,7 +88,7 @@ router isis CORE
 !
 ```
 
-## **ISIS Verification**
+## **IS-IS verification**
 
 ```erlang
 RP/0/0/CPU0:P3#show isis interface brief

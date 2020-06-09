@@ -1,8 +1,8 @@
 # Test 3.1: Basic LDP functionality with Huawei and Juniper interop
 
-## **LDP Configuration Template**
+## **LDP configuration template**
 
-### **LDP Template Option 1: auto-config**
+### **LDP template option 1: auto-config**
 
 ```erlang
 mpls ldp
@@ -21,7 +21,7 @@ router isis {{ ISIS_PROCESS_NAME }}
   mpls ldp auto-config
 ```
 
-### **LDP Template Option 2: interface listing**
+### **LDP template option 2: interface listing**
 
 ```erlang
 mpls ldp
@@ -41,7 +41,7 @@ router isis {{ ISIS_PROCESS_NAME }}
   mpls ldp auto-config
 ```
 
-## **LDP Configuration Example**
+## **LDP configuration example**
 
 ```coffeescript
 mpls ldp
@@ -61,7 +61,7 @@ router isis CORE
   mpls ldp auto-config
 ```
 
-## **LDP Verification**
+## **LDP verification**
 
 ```erlang
 RP/0/0/CPU0:P3#show mpls ldp neighbor

@@ -5,7 +5,7 @@
   * [Test 1.1: End-to-end ping/traceroute connectivity](ncs5500-poc-tests/test-1.1-end-to-end-ping-traceroute-connectivity.md)
   * [Test 1.2: Verification of interface counters](ncs5500-poc-tests/test-1.2-verification-of-interface-counters.md)
   * [Test 1.3: Verification of Log Messages](ncs5500-poc-tests/test-1.3-verification-of-log-messages.md)
-  * [Test 2.1: ISIS Basic Functionality](ncs5500-poc-tests/test-2.1-isis-basic-functionality.md)
+  * [Test 2.1: IS-IS basic functionality](ncs5500-poc-tests/test-2.1-isis-basic-functionality.md)
   * [Test 2.2: BGP basic functionality](ncs5500-poc-tests/test-2.2-bgp-basic-functionality.md)
   * [Test 3.1: Basic LDP functionality with Huawei and Juniper interop](ncs5500-poc-tests/test-3.1-basic-ldp-functionality-with-huawei-and-juniper-interop.md)
   * [Test 3.2: LDP label allocation for full Internet routing table](ncs5500-poc-tests/test-3.2-ldp-label-allocation-for-full-internet-routing-table.md)

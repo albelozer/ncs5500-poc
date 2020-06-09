@@ -2,6 +2,10 @@
 
 ## **mVPN Draft Rosen configuration template**
 
+{% hint style="info" %}
+There's no configuration required for P routers except core PIM.
+{% endhint %}
+
 ## **mVPN Draft Rosen configuration example**
 
 ## **mVPN Draft Rosen verification**

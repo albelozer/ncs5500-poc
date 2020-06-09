@@ -1,6 +1,6 @@
 # Test 4.1: Core PIM ASM with auto-RP and redundant RPs
 
-## **PIM ASM with Auto-rp configurtation template**
+## **PIM ASM with auto-rp configurtation template**
 
 ```erlang
 multicast-routing
@@ -22,7 +22,7 @@ multicast-routing
 
 ## **PIM ASM verification**
 
-```text
+```erlang
 RP/0/0/CPU0:P3#sho pim interface
 Mon Jun  8 13:26:06.440 UTC
 

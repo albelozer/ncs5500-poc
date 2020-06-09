@@ -11,6 +11,8 @@ logging {{ LOGGING_SERVER }} vrf {{ VRF_NAME }}
 logging source-interface {{ LOGGING_SOURCE_INTERFACE }}
 ```
 
+## Logging verification
+
 ```erlang
 show logging
 show logging last 10
