@@ -12,15 +12,107 @@ ISIS:
 # ISIS_NET: 1720.1600.1013
 NNI_IFACE_LIST:
   - NAME: "GigabitEthernet0/0/0/0"
+    IP:
+      IPV4: ~
+      IPV6: ~
   - NAME: "GigabitEthernet0/0/0/1"
+    IP:
+      IPV4: ~
+      IPV6: ~
   - NAME: "GigabitEthernet0/0/0/2"
+    IP:
+      IPV4: ~
+      IPV6: ~
   - NAME: "GigabitEthernet0/0/0/3"
+    IP:
+      IPV4: ~
+      IPV6: ~
 BGP:
   ASN: "100"
   RR_IP_ADDRESS: "172.16.1.1"
+  AF_LIST:
+    - NAME: "ipv4 unicast"
+      ACTIVE: True
+    - NAME: "ipv4 multicast"
+      ACTIVE: False
+    - NAME: "ipv6 unicast"
+      ACTIVE: True
+MPLD: True
+NTP:
+  SERVERS:
+    - "172.16.0.1"
+LOGGING:
+  SERVERS:
+    - "172.16.0.2"
 ```
 
 ### IPv4 addressing
+
+```erlang
+{% for DEVICE in DEVICE_LIST %}
+hostname {{ DEVICE.NAME }}
+!
+interface Loopback0
+ ipv4 address 172.16.1.{{ DEVICE.ID }}/32
+ ipv6 address {{ DEVICE.ID }}/128----------------------------
+!
+{%   for IFACE in DEVICE.NNI_IFACE_LIST %}
+interface {{ IFACE.NAME }}
+ ipv4 address {{ IFACE.IP.IPV4 }}
+ ipv6 address {{ IFACE.IP.IPV6 }}
+!
+{%   endfor %}
+router isis {{ ISIS.PROCESS_NAME }}
+ is-type level-2-only
+ net 49.{{ DEVICE.ISIS.NET }}.00---------------------
+ log adjacency changes
+ address-family ipv4 unicast
+  metric-style wide
+  router-id Loopback0
+  mpls ldp auto-config
+ !
+ address-family ipv6 unicast
+  metric-style wide
+  router-id Loopback0
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+  address-family ipv6 unicast
+  !
+ !
+{%   for IFACE in DEVICE.NNI_IFACE_LIST %}
+ interface {{ IFACE.NAME }}
+  point-to-point
+  address-family ipv4 unicast
+  !
+  address-family ipv6 unicast
+  !
+ !
+{%   endfor %}
+!
+mpls ldp
+ log
+  neighbor
+  graceful-restart
+  session-protection
+ !
+ graceful-restart
+ mldp
+ !
+ router-id 172.16.1.{{ DEVICE.ID }}
+ session protection
+ address-family ipv4
+  label
+   local
+    allocate for host-routes
+   !
+  !
+ !
+!
+{% endfor %}
+```
 
 ### IPv6 addressing
 
