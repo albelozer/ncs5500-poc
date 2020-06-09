@@ -1,12 +1,39 @@
 # Test 6.3: Control plane policing
 
-{% page-ref page="test-6.3-control-plane-policing.md" %}
+[Implementing LPTS](https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/ip-addresses/70x/b-ip-addresses-cg-ncs5500-70x/b-ip-addresses-cg-ncs5500-70x_chapter_01001.html)
 
-{% hint style="info" %}
-LPTS Introduction
-{% endhint %}
+```text
+show lpts pifib hardware police
+show lpts pifib hardware entry brief location node-id | inc SSH
+show lpts punt statistics location 0/0/CPU0
+```
 
-{% page-ref page="test-6.3-control-plane-policing.md" %}
+## Example
 
-
+```text
+lpts punt police
+ interface TenGigE0/0/0/8/0
+  mcast rate 1000
+  bcast rate 1000
+ !
+ mcast rate 1000
+ bcast rate 1000
+ protocol arp rate 700
+ protocol cdp rate 700
+ !
+ domain ACCESS
+  mcast rate 5000
+  bcast rate 5000
+ !
+!
+lpts pifib hardware domain ACCESS
+ interface TenGigE0/0/0/8/1
+!
+lpts punt police location 0/0/CPU0
+ protocol arp rate 500
+ protocol cdp rate 500
+!
+lpts punt police location 0/4/CPU0
+!
+```
 
