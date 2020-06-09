@@ -1,6 +1,7 @@
 # Table of contents
 
 * [Introduction](README.md)
+* [Base Configuration](base-configuration.md)
 * [NCS5500 PoC Tests](ncs5500-poc-tests/README.md)
   * [Test 1.1: End-to-end ping/traceroute connectivity](ncs5500-poc-tests/test-1.1-end-to-end-ping-traceroute-connectivity.md)
   * [Test 1.2: Verification of interface counters](ncs5500-poc-tests/test-1.2-verification-of-interface-counters.md)
@@ -29,4 +30,5 @@
   * [Test 8.4: NTP functionality](ncs5500-poc-tests/test-8.4-ntp-functionality.md)
   * [Test 8.5: Syslog functionality](ncs5500-poc-tests/test-8.5-syslog-functionality.md)
   * [Test 9.1: 1588v2 PTP functionality](ncs5500-poc-tests/test-9.1-1588v2-ptp-functionality.md)
+* [Jinja2 Preview Tool](http://j2preview.herokuapp.com/)
 
