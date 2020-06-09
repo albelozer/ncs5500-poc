@@ -17,7 +17,7 @@ router bgp {{ BGP_ASN }}
   address-family ipv4 unicast
   !
  !
-! 
+!
 ```
 
 ## **BGP Configuration Example**
