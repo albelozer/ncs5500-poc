@@ -4,32 +4,15 @@
 
 ```yaml
 ---
-RID_IP_ADDRESS: "172.16.1.11"
 MGMT_VRF_NAME: "default"
+MAX_TELNET: 20
+SSH_ACL: "ACL-SSH-IN"
 ISIS:
   PROCESS_NAME: "CORE"
-  NET: ~
-# ISIS_NET: 1720.1600.1013
-NNI_IFACE_LIST:
-  - NAME: "GigabitEthernet0/0/0/0"
-    IP:
-      IPV4: ~
-      IPV6: ~
-  - NAME: "GigabitEthernet0/0/0/1"
-    IP:
-      IPV4: ~
-      IPV6: ~
-  - NAME: "GigabitEthernet0/0/0/2"
-    IP:
-      IPV4: ~
-      IPV6: ~
-  - NAME: "GigabitEthernet0/0/0/3"
-    IP:
-      IPV4: ~
-      IPV6: ~
 BGP:
   ASN: "100"
-  RR_IP_ADDRESS: "172.16.1.1"
+  RR_LIST:
+    - "172.16.1.1"
   AF_LIST:
     - NAME: "ipv4 unicast"
       ACTIVE: True
@@ -44,6 +27,39 @@ NTP:
 LOGGING:
   SERVERS:
     - "172.16.0.2"
+DEVICE_LIST:
+  - NAME: P3
+    ID: 13
+    L0:
+      IPV4: "172.16.1.13"
+      IPV6: ~
+    ISIS:
+      NET: "1720.1600.1013"
+    NNI_IFACE_LIST:
+      - NAME: "GigabitEthernet0/0/0/0"
+        IP:
+          IPV4: ~
+          IPV6: ~
+      - NAME: "GigabitEthernet0/0/0/1"
+        IP:
+          IPV4: ~
+          IPV6: ~
+  - NAME: P4
+    ID: 14
+    L0:
+      IPV4: "172.16.1.14"
+      IPV6: ~
+    ISIS:
+      NET: "1720.1600.1014"
+    NNI_IFACE_LIST:
+      - NAME: "GigabitEthernet0/0/0/0"
+        IP:
+          IPV4: ~
+          IPV6: ~
+      - NAME: "GigabitEthernet0/0/0/1"
+        IP:
+          IPV4: ~
+          IPV6: ~
 ```
 
 ### IPv4 addressing
@@ -53,8 +69,8 @@ LOGGING:
 hostname {{ DEVICE.NAME }}
 !
 interface Loopback0
- ipv4 address 172.16.1.{{ DEVICE.ID }}/32
- ipv6 address {{ DEVICE.ID }}/128----------------------------
+ ipv4 address {{ DEVICE.L0.IPV4 }}/32
+ ipv6 address {{ DEVICE.L0.IPV6 }}/128
 !
 {%   for IFACE in DEVICE.NNI_IFACE_LIST %}
 interface {{ IFACE.NAME }}
@@ -64,7 +80,7 @@ interface {{ IFACE.NAME }}
 {%   endfor %}
 router isis {{ ISIS.PROCESS_NAME }}
  is-type level-2-only
- net 49.{{ DEVICE.ISIS.NET }}.00---------------------
+ net {{ DEVICE.ISIS.NET }}
  log adjacency changes
  address-family ipv4 unicast
   metric-style wide
@@ -111,6 +127,22 @@ mpls ldp
   !
  !
 !
+router bgp {{ BGP.ASN }}
+ bgp router-id {{ DEVICE.L0.IPV4 }}
+ bgp graceful-restart
+ bgp log neighbor changes detail
+ address-family ipv4 unicast
+ !
+{%   for RR in BGP.RR_LIST %}
+ neighbor {{ RR }}
+  remote-as {{ BGP.ASN }}
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+{%   endfor %}
+!
+!---------------------------------------------------------------------------------
 {% endfor %}
 ```
 
@@ -121,7 +153,7 @@ mpls ldp
 ```erlang
 router isis {{ ISIS.PROCESS_NAME }}
  is-type level-2-only
- net 49.{{ ISIS.NET }}.00
+ net {{ DEVICE.ISIS.NET }}
  log adjacency changes
  address-family ipv4 unicast
   metric-style wide
@@ -163,7 +195,7 @@ mpls ldp
  graceful-restart
  mldp
  !
- router-id {{ RID_IP_ADDRESS }}
+ router-id {{ DEVICE.L0.IPV4 }}
  session protection
  address-family ipv4
   label
@@ -179,18 +211,19 @@ mpls ldp
 
 ```erlang
 router bgp {{ BGP.ASN }}
- bgp router-id {{ RID_IP_ADDRESS }}
+ bgp router-id {{ DEVICE.L0.IPV4 }}
  bgp graceful-restart
  bgp log neighbor changes detail
  address-family ipv4 unicast
  !
- neighbor {{ BGP.RR_IP_ADDRESS }}
+{%   for RR in BGP.RR_LIST %}
+ neighbor {{ RR }}
   remote-as {{ BGP.ASN }}
   update-source Loopback0
   address-family ipv4 unicast
   !
  !
-!
+{%   endfor %}
 ```
 
 ### PIM SM in the core
