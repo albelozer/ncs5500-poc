@@ -107,6 +107,7 @@ interface {{ IFACE.NAME }}
 !
 {%   endfor %}
 router isis {{ ISIS.PROCESS_NAME }}
+ set-overload-bit on-startup 600
  is-type level-2-only
  net {{ DEVICE.ISIS.NET }}
  log adjacency changes
