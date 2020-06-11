@@ -62,11 +62,23 @@ DEVICE_LIST:
           IPV6: ~
 ```
 
-### IPv4 addressing
+### Full template for NCS 5500 P-routers
 
 ```erlang
 {% for DEVICE in DEVICE_LIST %}
 hostname {{ DEVICE.NAME }}
+!
+control-plane
+ management-plane
+  inband
+   interface all
+    allow SSH
+    allow SNMP
+    allow Telnet
+    allow NETCONF
+   !
+  !
+ !
 !
 interface Loopback0
  ipv4 address {{ DEVICE.L0.IPV4 }}/32
@@ -108,6 +120,21 @@ router isis {{ ISIS.PROCESS_NAME }}
  !
 {%   endfor %}
 !
+router bgp {{ BGP.ASN }}
+ bgp router-id {{ DEVICE.L0.IPV4 }}
+ bgp graceful-restart
+ bgp log neighbor changes detail
+ address-family ipv4 unicast
+ !
+{%   for RR in BGP.RR_LIST %}
+ neighbor {{ RR }}
+  remote-as {{ BGP.ASN }}
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+{%   endfor %}
+!
 mpls ldp
  log
   neighbor
@@ -127,116 +154,25 @@ mpls ldp
   !
  !
 !
-router bgp {{ BGP.ASN }}
- bgp router-id {{ DEVICE.L0.IPV4 }}
- bgp graceful-restart
- bgp log neighbor changes detail
- address-family ipv4 unicast
- !
-{%   for RR in BGP.RR_LIST %}
- neighbor {{ RR }}
-  remote-as {{ BGP.ASN }}
-  update-source Loopback0
-  address-family ipv4 unicast
-  !
- !
-{%   endfor %}
-!
-!---------------------------------------------------------------------------------
-{% endfor %}
-```
-
-### IPv6 addressing
-
-### IS-IS base configuration
-
-```erlang
-router isis {{ ISIS.PROCESS_NAME }}
- is-type level-2-only
- net {{ DEVICE.ISIS.NET }}
- log adjacency changes
- address-family ipv4 unicast
-  metric-style wide
-  router-id Loopback0
-  mpls ldp auto-config
- !
- address-family ipv6 unicast
-  metric-style wide
-  router-id Loopback0
- !
- interface Loopback0
-  passive
-  address-family ipv4 unicast
-  !
-  address-family ipv6 unicast
-  !
- !
- {% for IFACE in NNI_IFACE_LIST %}
- interface {{ IFACE.NAME }}
-  point-to-point
-  address-family ipv4 unicast
-  !
-  address-family ipv6 unicast
-  !
- !
- {% endfor %}
-!
-```
-
-### MPLS LDP and mLDP
-
-```erlang
-mpls ldp
- log
-  neighbor
-  graceful-restart
-  session-protection
- !
- graceful-restart
- mldp
- !
- router-id {{ DEVICE.L0.IPV4 }}
- session protection
- address-family ipv4
-  label
-   local
-    allocate for host-routes
-   !
-  !
- !
-!
-```
-
-### BGP
-
-```erlang
-router bgp {{ BGP.ASN }}
- bgp router-id {{ DEVICE.L0.IPV4 }}
- bgp graceful-restart
- bgp log neighbor changes detail
- address-family ipv4 unicast
- !
-{%   for RR in BGP.RR_LIST %}
- neighbor {{ RR }}
-  remote-as {{ BGP.ASN }}
-  update-source Loopback0
-  address-family ipv4 unicast
-  !
- !
-{%   endfor %}
-```
-
-### PIM SM in the core
-
-```erlang
 multicast-routing
  address-family ipv4
   interface all enable
  !
 !
+ssh server logging
+ssh server disable hmac hmac-sha1
+ssh server algorithms cipher aes256-ctr aes128-gcm@openssh.com aes256-gcm@openssh.com
+ssh server algorithms host-key ecdsa-nistp256 ecdsa-nistp384 ecdsa-nistp521
+ssh server algorithms key-exchange ecdh-sha2-nistp521 ecdh-sha2-nistp384 ecdh-sha2-nistp256
+ssh server v2
+ssh server vrf {{ MGMT_VRF_NAME }} ipv4 access-list {{ SSH_ACL }}
+!---------------------------------------------------------------------------------
+{% endfor %}
 ```
 
-### SSH and telnet
+### 
+
+### SH and telnet
 
 ```erlang
 telnet vrf {{ MGMT_VRF_NAME  }} ipv4 server max-servers {{ MAX_TELNET }}
@@ -253,17 +189,6 @@ ssh server vrf {{ MGMT_VRF_NAME }} ipv4 access-list {{ SSH_ACL }}
 ### Management plane protection
 
 ```erlang
-control-plane
- management-plane
-  inband
-   interface all
-    allow SSH
-    allow SNMP
-    allow Telnet
-    allow NETCONF
-   !
-  !
- !
-!
+
 ```
 
