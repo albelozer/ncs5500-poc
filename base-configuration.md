@@ -7,6 +7,11 @@
 MGMT_VRF_NAME: "default"
 MAX_TELNET: 20
 SSH_ACL: "ACL-SSH-IN"
+SYSLOG:
+  FACILITY: "local5"
+  SOURCE_INTERFACE: "Loopback0"
+  SERVER_LIST:
+    - "172.1.1.1"
 ISIS:
   PROCESS_NAME: "CORE"
 BGP:
@@ -28,7 +33,7 @@ LOGGING:
   SERVERS:
     - "172.16.0.2"
 DEVICE_LIST:
-  - NAME: P3
+  - NAME: "P3"
     ID: 13
     L0:
       IPV4: "172.16.1.13"
@@ -44,7 +49,7 @@ DEVICE_LIST:
         IP:
           IPV4: ~
           IPV6: ~
-  - NAME: P4
+  - NAME: "P4"
     ID: 14
     L0:
       IPV4: "172.16.1.14"
@@ -67,6 +72,17 @@ DEVICE_LIST:
 ```erlang
 {% for DEVICE in DEVICE_LIST %}
 hostname {{ DEVICE.NAME }}
+!
+telnet vrf {{ MGMT_VRF_NAME }} ipv4 server max-servers {{ MAX_TELNET }}
+!
+logging console disable
+logging monitor disable
+logging buffered 10000000
+logging facility {{ SYSLOG.FACILITY }}
+{%   for SERVER in SYSLOG.SERVER_LIST %}
+logging {{ SERVER }} vrf {{ MGMT_VRF_NAME }}
+{%   endfor %}
+logging source-interface {{ SYSLOG.SOURCE_INTERFACE }}
 !
 control-plane
  management-plane
@@ -170,25 +186,7 @@ ssh server vrf {{ MGMT_VRF_NAME }} ipv4 access-list {{ SSH_ACL }}
 {% endfor %}
 ```
 
-### 
 
-### SH and telnet
 
-```erlang
-telnet vrf {{ MGMT_VRF_NAME  }} ipv4 server max-servers {{ MAX_TELNET }}
-!
-ssh server logging
-ssh server disable hmac hmac-sha1
-ssh server algorithms cipher aes256-ctr aes128-gcm@openssh.com aes256-gcm@openssh.com
-ssh server algorithms host-key ecdsa-nistp256 ecdsa-nistp384 ecdsa-nistp521
-ssh server algorithms key-exchange ecdh-sha2-nistp521 ecdh-sha2-nistp384 ecdh-sha2-nistp256
-ssh server v2
-ssh server vrf {{ MGMT_VRF_NAME }} ipv4 access-list {{ SSH_ACL }}
-```
 
-### Management plane protection
-
-```erlang
-
-```
 
