@@ -292,3 +292,14 @@ Prefix          Label   Label(s)       Outgoing     Next Hop            Flags
 172.16.1.25/32  24008   24016          Gi0/0/0/1    172.16.32.1         G   
 ```
 
+```erlang
+RP/0/0/CPU0:P3#show mpls label table summary
+Fri Jun 12 09:58:19.522 UTC
+Application                  Count  
+---------------------------- -------
+LSD(A)                       4
+LDP(A)                       10
+---------------------------- -------
+TOTAL                        14
+```
+
