@@ -4,7 +4,7 @@
 Password policy
 {% endhint %}
 
-```text
+```erlang
 aaa password-policy AAA-PASSWORD-HARDENING
  numeric 1
  lower-case 1
