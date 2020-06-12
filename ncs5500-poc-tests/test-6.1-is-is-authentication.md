@@ -1,7 +1,5 @@
 # Test 6.1: IS-IS Authentication
 
-[IS-IS Authentication](https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/routing/70x/b-routing-cg-ncs5500-70x/b-routing-cg-ncs5500-70x_chapter_010.html#con_1276647)
-
 {% hint style="info" %}
 Authentication is available to limit the establishment of adjacencies by using the hello-password command, and to limit the exchange of LSPs by using the lsp-password command. The keychain feature allows IS-IS to reference configured keychains.
 {% endhint %}
@@ -48,4 +46,10 @@ router isis CORE
 ```
 
 ## **IS-IS Authentication verification**
+
+## **Links**
+
+{% embed url="https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/routing/70x/b-routing-cg-ncs5500-70x/b-routing-cg-ncs5500-70x\_chapter\_010.html\#con\_1276647" %}
+
+\*\*\*\*
 
