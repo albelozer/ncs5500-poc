@@ -17,12 +17,13 @@ ISIS:
 BGP:
   ASN: "100"
   RR_LIST:
-    - "172.16.1.1"
+    - ADDRESS: "172.16.1.1"
+      AF: "ipv4 unicast"
+    - ADDRESS: "2001:db8::1"
+      AF: "ipv6 unicast"
   AF_LIST:
     - NAME: "ipv4 unicast"
       ACTIVE: True
-    - NAME: "ipv4 multicast"
-      ACTIVE: False
     - NAME: "ipv6 unicast"
       ACTIVE: True
 MPLD: True
@@ -141,13 +142,15 @@ router bgp {{ BGP.ASN }}
  bgp router-id {{ DEVICE.L0.IPV4 }}
  bgp graceful-restart
  bgp log neighbor changes detail
- address-family ipv4 unicast
+{%   for AF in BGP.AF_LIST %}
+ address-family {{ AF.NAME }}
  !
+{%   endfor %}
 {%   for RR in BGP.RR_LIST %}
- neighbor {{ RR }}
+ neighbor {{ RR.ADDRESS }}
   remote-as {{ BGP.ASN }}
   update-source Loopback0
-  address-family ipv4 unicast
+  address-family {{ RR.AF }}
   !
  !
 {%   endfor %}

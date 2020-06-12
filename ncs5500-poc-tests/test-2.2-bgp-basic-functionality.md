@@ -2,22 +2,26 @@
 
 ## **BGP configuration template**
 
-{% hint style="info" %}
-iBGP IPv4 template.
-{% endhint %}
-
 ```erlang
-router bgp {{ BGP_ASN }}
- bgp router-id {{ RID }}
- address-family ipv4 unicast
+{% for DEVICE in DEVICE_LIST %}
+router bgp {{ BGP.ASN }}
+ bgp router-id {{ DEVICE.L0.IPV4 }}
+ bgp graceful-restart
+ bgp log neighbor changes detail
+{%   for AF in BGP.AF_LIST %}
+ address-family {{ AF.NAME }}
  !
- neighbor {{ NEIGHBOR.ADDRESS }}
-  remote-as {{ BGP_ASN }}
+{%   endfor %}
+{%   for RR in BGP.RR_LIST %}
+ neighbor {{ RR.ADDRESS }}
+  remote-as {{ BGP.ASN }}
   update-source Loopback0
-  address-family ipv4 unicast
+  address-family {{ RR.AF }}
   !
  !
-!
+{%   endfor %}
+----------------------------------------------------------------------------------
+{% endfor %}
 ```
 
 ## **BGP configuration example**
