@@ -7,9 +7,12 @@ Be aware of IS-IS multitopology support and default state on Huawei and Juniper.
 ## **IS-IS configuration template**
 
 ```erlang
-router isis {{ ISIS_PROCESS_NAME }}
+{% for DEVICE in DEVICE_LIST %}
+router isis {{ ISIS.PROCESS_NAME }}
+ set-overload-bit on-startup 600
  is-type level-2-only
- net {{ ISIS_NET }}
+ net {{ DEVICE.ISIS.NET }}
+ log adjacency changes
  address-family ipv4 unicast
   metric-style wide
   router-id Loopback0
@@ -26,13 +29,18 @@ router isis {{ ISIS_PROCESS_NAME }}
   address-family ipv6 unicast
   !
  !
- interface {{ NNI_IFACE }}
+{%   for IFACE in DEVICE.NNI_IFACE_LIST %}
+ interface {{ IFACE.NAME }}
   point-to-point
   address-family ipv4 unicast
   !
   address-family ipv6 unicast
   !
  !
+{%   endfor %}
+!
+!---------------------------------------------------------------------------------
+{% endfor %}
 ```
 
 ## **IS-IS configuration example**

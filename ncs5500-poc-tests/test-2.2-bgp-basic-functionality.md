@@ -20,7 +20,7 @@ router bgp {{ BGP.ASN }}
   !
  !
 {%   endfor %}
-----------------------------------------------------------------------------------
+!---------------------------------------------------------------------------------
 {% endfor %}
 ```
 
@@ -29,12 +29,22 @@ router bgp {{ BGP.ASN }}
 ```erlang
 router bgp 100
  bgp router-id 172.16.1.13
+ bgp graceful-restart
+ bgp log neighbor changes detail
  address-family ipv4 unicast
+ !
+ address-family ipv6 unicast
  !
  neighbor 172.16.1.1
   remote-as 100
   update-source Loopback0
   address-family ipv4 unicast
+  !
+ !
+ neighbor 2001:db8::1
+  remote-as 100
+  update-source Loopback0
+  address-family ipv6 unicast
   !
  !
 !

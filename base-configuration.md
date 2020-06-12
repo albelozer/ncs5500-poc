@@ -4,9 +4,11 @@
 
 ```yaml
 ---
+LOOPBACK_SUBNET: "172.16.1.0/24"
 MGMT_VRF_NAME: "default"
 MAX_TELNET: 20
 SSH_ACL: "ACL-SSH-IN"
+ACL_ACCEPT_LDP: "ACL-ACCEPT-LDP"
 SYSLOG:
   FACILITY: "local5"
   SOURCE_INTERFACE: "Loopback0"
@@ -38,7 +40,7 @@ DEVICE_LIST:
     ID: 13
     L0:
       IPV4: "172.16.1.13"
-      IPV6: ~
+      IPV6: "2001:db8::13"
     ISIS:
       NET: "1720.1600.1013"
     NNI_IFACE_LIST:
@@ -50,11 +52,16 @@ DEVICE_LIST:
         IP:
           IPV4: ~
           IPV6: ~
+    LDP_PEER_LIST:
+      - 172.16.1.11
+      - 172.16.1.14
+      - 172.16.1.21
+      - 172.16.1.22
   - NAME: "P4"
     ID: 14
     L0:
       IPV4: "172.16.1.14"
-      IPV6: ~
+      IPV6: "2001:db8::14"
     ISIS:
       NET: "1720.1600.1014"
     NNI_IFACE_LIST:
@@ -66,6 +73,12 @@ DEVICE_LIST:
         IP:
           IPV4: ~
           IPV6: ~
+    LDP_PEER_LIST:
+      - 172.16.1.13
+      - 172.16.1.23
+      - 172.16.1.25
+      - 172.16.1.12
+      - 172.16.1.24
 ```
 
 ### Full template for NCS 5500 P-routers
@@ -155,21 +168,22 @@ router bgp {{ BGP.ASN }}
  !
 {%   endfor %}
 !
+ipv4 access-list {{ ACL_ACCEPT_LDP }}
+ permit ipv4 {{ LOOPBACK_SUBNET }} any
+!
 mpls ldp
- log
-  neighbor
-  graceful-restart
-  session-protection
- !
- graceful-restart
- mldp
- !
- router-id 172.16.1.{{ DEVICE.ID }}
- session protection
+ router-id {{ DEVICE.L0.IPV4 }}
  address-family ipv4
   label
    local
     allocate for host-routes
+   !
+   remote
+    accept
+{%   for LDP_PEER in DEVICE.LDP_PEER_LIST %}
+     from {{ LDP_PEER }}:0 for {{ ACL_ACCEPT_LDP }}
+{%   endfor %}
+    !
    !
   !
  !
