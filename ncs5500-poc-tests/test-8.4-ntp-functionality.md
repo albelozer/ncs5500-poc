@@ -2,7 +2,7 @@
 
 ## **NTP configuration example**
 
-```text
+```erlang
 ntp
  authentication-key 5 md5 encrypted cisco
  authenticate
@@ -15,7 +15,7 @@ ntp
 
 ## **NTP Verification**
 
-```text
+```erlang
 RP/0/RP0/CPU0:NCS540-02#sh ntp associations
 Mon Mar 30 09:18:25.647 UTC
 
@@ -25,7 +25,7 @@ Mon Mar 30 09:18:25.647 UTC
  * sys_peer, # selected, + candidate, - outlayer, x falseticker, ~ configured
 ```
 
-```text
+```erlang
 RP/0/RP0/CPU0:NCS540-02#sh ntp status
 Mon Mar 30 09:18:33.306 UTC
 
