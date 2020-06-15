@@ -10,3 +10,8 @@ There's no configuration required for P routers except core PIM.
 
 ## **mVPN Draft Rosen verification**
 
+```text
+show mrib route
+show mfib route
+```
+

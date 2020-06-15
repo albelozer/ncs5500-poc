@@ -8,7 +8,16 @@ ipv4 access-list {{ ACL_ACCEPT_LDP }}
  permit ipv4 {{ LOOPBACK_SUBNET }} any
 !
 mpls ldp
+ log
+  neighbor
+  graceful-restart
+  session-protection
+ !
+ graceful-restart
+ mldp
+ !
  router-id {{ DEVICE.L0.IPV4 }}
+ session protection
  address-family ipv4
   label
    local
@@ -31,6 +40,9 @@ mpls ldp
 ## **LDP configuration example**
 
 ```coffeescript
+ipv4 access-list ACL-ACCEPT-LDP
+ 10 permit ipv4 172.16.1.0 0.0.0.255 any
+!
 mpls ldp
  log
   neighbor
