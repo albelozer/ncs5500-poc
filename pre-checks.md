@@ -1,5 +1,7 @@
 # Pre-checks
 
+{% embed url="https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/system-setup/71x/b-system-setup-cg-ncs5500-71x/b-system-setup-cg-ncs5500-71x\_chapter\_0100.html" %}
+
 ## Power supply
 
 2xPS modules for NCS5504  
@@ -9,7 +11,13 @@
 
 Boxes have arrived with 7.1.1.
 
-## TCAM resource allocation
+## FPD Firmware
+
+```text
+show hw-module fpd
+```
+
+## TCAM resource allocation \(optional\)
 
 ```text
 hw-module fib ipv4 scale internet-optimized
