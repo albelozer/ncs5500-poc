@@ -1,6 +1,6 @@
 # Test 6.3: Control plane policing
 
-[Implementing LPTS](https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/ip-addresses/70x/b-ip-addresses-cg-ncs5500-70x/b-ip-addresses-cg-ncs5500-70x_chapter_01001.html)
+{% embed url="https://www.cisco.com/c/en/us/td/docs/iosxr/ncs5500/ip-addresses/71x/b-ip-addresses-cg-ncs5500-71x/b-ip-addresses-cg-ncs5500-71x\_chapter\_01001.html" %}
 
 ```text
 show lpts pifib hardware police
