@@ -19,6 +19,8 @@ aaa password-policy AAA-PASSWORD-HARDENING
 ```
 
 ```erlang
+telnet vrf {{ MGMT_VRF_NAME }} ipv4 server max-servers {{ MAX_TELNET }} access-list {{ TELNET_ACL }}
+!
 ssh server logging
 ssh server disable hmac hmac-sha1
 ssh server algorithms cipher aes256-ctr aes128-gcm@openssh.com aes256-gcm@openssh.com

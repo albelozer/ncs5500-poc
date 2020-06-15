@@ -19,6 +19,10 @@ show hw-module fpd
 
 ## TCAM resource allocation \(optional\)
 
+{% hint style="info" %}
+Required for Test 2.3.
+{% endhint %}
+
 ```text
 hw-module fib ipv4 scale internet-optimized
 ```

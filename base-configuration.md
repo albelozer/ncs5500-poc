@@ -116,6 +116,7 @@ interface Loopback0
 !
 {%   for IFACE in DEVICE.NNI_IFACE_LIST %}
 interface {{ IFACE.NAME }}
+ carrier-delay down 0 up 500
  ipv4 address {{ IFACE.IP.IPV4 }}
  ipv6 address {{ IFACE.IP.IPV6 }}
 !

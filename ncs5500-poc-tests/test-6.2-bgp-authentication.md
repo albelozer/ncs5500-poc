@@ -8,7 +8,6 @@ router bgp {{ AS }}
   password clear {{ PASSWORD }}
  !
 !
-end
 ```
 
 ## **BGP authentication configuration example**
